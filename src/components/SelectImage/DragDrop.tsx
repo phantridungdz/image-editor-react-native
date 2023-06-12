@@ -26,6 +26,8 @@ interface DragDrop {
   onDrop?(x: number, y: number): void;
   currentIndex: number;
   index: number;
+  height: number;
+  width: number;
 }
 
 const DragDrop: React.FunctionComponent<DragDrop> = ({
@@ -34,6 +36,8 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
   onDrop,
   currentIndex,
   index,
+  height,
+  width,
 }) => {
   const x = useSharedValue(0);
   const y = useSharedValue(0);
@@ -90,7 +94,10 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
   return (
     <PanGestureHandler onGestureEvent={drag}>
       <Animated.View
+        className="absolute h-full w-full"
         style={[
+          {left: zIndex * 20},
+          {top: zIndex * 20},
           {zIndex: zIndex},
           useAnimatedStyle(() => {
             return {
@@ -105,6 +112,8 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
         <PinchGestureHandler onGestureEvent={zoom}>
           <Animated.View
             style={[
+              {height: height},
+              {width: width},
               {borderWidth: isSelect ? 9 : 0},
               {borderColor: isSelect ? 'blue' : ''},
               useAnimatedStyle(() => {

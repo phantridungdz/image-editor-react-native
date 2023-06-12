@@ -28,7 +28,9 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
   const viewShotRef = React.useRef<ViewShot>(null);
   const windowHeight = Dimensions.get('window').height;
   const windowWidth = Dimensions.get('window').width;
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<
+    {path: string; width: number; height: number}[]
+  >([]);
   const [curentIndex, setCurrentIndex] = useState(0);
   const [_, setScrollHeight] = useState(windowHeight);
   const [widthShotView, setWidthShotView] = useState(windowWidth);
@@ -38,11 +40,13 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
   const drop = (_x: number, _y: number) => {};
   const openImagePicker = () => {
     ImagePicker.openPicker({
-      width: windowWidth,
-      height: windowHeight,
       multiple: true,
     }).then(response => {
-      const imagePaths = response.map(image => `file://${image.path}`);
+      const imagePaths = response.map(image => ({
+        path: `file://${image.path}`,
+        width: image.width / 5,
+        height: image.height / 5,
+      }));
       setImages(prevImages => prevImages.concat(imagePaths));
       setScrollHeight(imagePaths.length * windowHeight);
     });
@@ -65,13 +69,26 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
   };
   const editImage = (index: number) => {
     ImagePicker.openCropper({
+      compressImageQuality: 1,
       freeStyleCropEnabled: true,
-      path: images[index],
+      height: images[index].height,
+      width: images[index].width,
+      path: images[index].path,
       mediaType: 'photo',
     }).then(image => {
       console.log(image);
       const updatedImages = [...images];
-      updatedImages[index] = `file://${image.path}`;
+      const croppedWidth = image.cropRect?.width || updatedImages[index].width;
+      const croppedHeight =
+        image.cropRect?.height || updatedImages[index].height;
+      const croppedWidthPart = croppedWidth / 5;
+      const croppedHeightPart = croppedHeight / 5;
+      updatedImages[index] = {
+        ...updatedImages[index],
+        path: `file://${image.path}`,
+        width: croppedWidthPart,
+        height: croppedHeightPart,
+      };
       setImages(updatedImages);
     });
   };
@@ -146,16 +163,21 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
               index={index}
               onDrag={drag}
               onDrop={drop}
+              width={image.width}
+              height={image.height}
               currentIndex={curentIndex}>
               <TouchableOpacity
                 key={index}
                 style={{display: curentIndex === index ? 'flex' : 'none'}}
-                className="h-[55px] w-[55px] absolute z-10 rounded-full bg-contain bg-white -top-[50px] -right-[25px]"
+                className="h-[55px] w-[55px] absolute  z-10 rounded-full bg-contain bg-white -top-[50px] -right-[25px]"
                 onPressIn={() => deleteImage(index)}>
                 <Text className="text-black m-auto text-[45px]">X</Text>
               </TouchableOpacity>
               <TouchableOpacity onPressIn={() => selectOrNot(index)}>
-                <Image className="w-full h-full" source={{uri: image}} />
+                <Image
+                  style={{width: image.width, height: image.height}}
+                  source={{uri: image.path}}
+                />
               </TouchableOpacity>
             </DragDrop>
           ))}
