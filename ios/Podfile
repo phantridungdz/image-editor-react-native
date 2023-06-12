@@ -22,10 +22,6 @@ if linkage != nil
 end
 
 target 'ScanBill' do
-  pod 'RNOpencv3', :path => '../node_modules/react-native-opencv3/ios', :subspecs => [
-      'CvCamera'
-  ]
-  pod 'RNFS', :path => '../node_modules/react-native-fs'
   config = use_native_modules!
 
   # Flags change depending on the env values.

@@ -1,23 +1,24 @@
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import HomeScreen from './screens/HomeScreen';
-import ScanScreen from './screens/ScanScreen';
-import ViewImageScreen from './screens/ViewImageScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import ScanScreen from './src/screens/ScanScreen';
+import SelectImageScreen from './src/screens/SelectImageScreen';
 
 const Stack = createStackNavigator();
 
-// eslint-disable-next-line no-undef
-export default NavigationStack = () => {
+const NavigationStack: React.FC = () => {
   return (
-    <NavigationContainer className="bg-black">
+    <NavigationContainer>
       <Stack.Navigator
         initialRouteName="HomeScreen"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="ScanScreen" component={ScanScreen} />
-        <Stack.Screen name="ViewImageScreen" component={ViewImageScreen} />
+        <Stack.Screen name="SelectImageScreen" component={SelectImageScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+
+export default NavigationStack;
