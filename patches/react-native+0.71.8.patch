@@ -1,7 +1,28 @@
+diff --git a/node_modules/react-native/index.js b/node_modules/react-native/index.js
+index f556fa3..ccca027 100644
++++ b/node_modules/react-native/index.js
+@@ -411,43 +411,18 @@ module.exports = {
+   },
+   // Deprecated Prop Types
+   get ColorPropType(): $FlowFixMe {
+     return require('deprecated-react-native-prop-types').ColorPropType;
+   },
++  
+   get EdgeInsetsPropType(): $FlowFixMe {
+     return require('deprecated-react-native-prop-types').EdgeInsetsPropType;
+   },
++  
+   get PointPropType(): $FlowFixMe {
+     return require('deprecated-react-native-prop-types').PointPropType;
+   },
++  
+   get ViewPropTypes(): $FlowFixMe {
+     return require('deprecated-react-native-prop-types').ViewPropTypes;
+   },
+ };
 diff --git a/node_modules/react-native/scripts/.packager.env b/node_modules/react-native/scripts/.packager.env
 new file mode 100644
 index 0000000..361f5fb
---- /dev/null
 +++ b/node_modules/react-native/scripts/.packager.env
 @@ -0,0 +1 @@
 +export RCT_METRO_PORT=8081

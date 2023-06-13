@@ -95,15 +95,16 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
     <PanGestureHandler onGestureEvent={drag}>
       <Animated.View
         style={[
-          // {left: zIndex * 20},
-          // {top: zIndex * 20},
+          {backgroundColor: 'red'},
+          {height: height},
+          {width: width},
           {zIndex: zIndex},
           useAnimatedStyle(() => {
             return {
               transform: [
-                {translateX: x.value},
-                {translateY: y.value},
-                {scale: scale.value / 2},
+                {translateX: x.value * 10},
+                {translateY: y.value * 10},
+                {scale: scale.value},
               ],
             };
           }),
@@ -111,10 +112,11 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
         <PinchGestureHandler onGestureEvent={zoom}>
           <Animated.View
             style={[
-              {height: height},
-              {width: width},
-              {borderWidth: isSelect ? 2 : 0},
-              {borderColor: isSelect ? 'blue' : ''},
+              {backgroundColor: 'red'},
+              {height: height + 18},
+              {width: width + 18},
+              {borderWidth: isSelect ? 9 : 0},
+              {borderColor: isSelect ? '' : 'blue'},
               useAnimatedStyle(() => {
                 return {
                   transform: [{scale: scale.value}],
