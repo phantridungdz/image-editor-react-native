@@ -94,7 +94,6 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
   return (
     <PanGestureHandler onGestureEvent={drag}>
       <Animated.View
-        className="absolute h-full w-full"
         style={[
           {backgroundColor: 'red'},
           {height: height},

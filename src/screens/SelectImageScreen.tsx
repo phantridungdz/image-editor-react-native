@@ -15,6 +15,7 @@ import Slider from '@react-native-community/slider';
 import DragDrop from '../components/SelectImage/DragDrop';
 import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
 import {Text} from 'react-native';
+import Snackbar from 'react-native-snackbar';
 
 interface SelectImageScreen {
   navigation: any;
@@ -33,9 +34,12 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
   const viewShotRef = React.useRef<ViewShot>(null);
   const windowHeight = Dimensions.get('window').height;
   const windowWidth = Dimensions.get('window').width;
+  const listImage = route.params?.images;
+
   const [images, setImages] = useState<
     {path: string; width: number; height: number}[]
   >([]);
+  console.log('🚀 ~ file: SelectImageScreen.tsx:35 ~ images:', images);
   const [curentIndex, setCurrentIndex] = useState(0);
   const [_, setScrollHeight] = useState(windowHeight);
   const [widthShotView, setWidthShotView] = useState(windowWidth);
@@ -236,10 +240,18 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
               </TouchableOpacity>
               <TouchableOpacity onPressIn={() => selectOrNot(index)}>
                 <Image
-                  style={{width: image.width, height: image.height}}
-                  source={{uri: image.path}}
+                  style={{
+                    width: image.path
+                      ? image.width
+                      : Dimensions.get('screen').width / 2,
+                    height: image.path
+                      ? image.width
+                      : Dimensions.get('screen').height / 2,
+                  }}
+                  source={{uri: image.path ? image.path : image}}
                 />
               </TouchableOpacity>
+              <Text>{index}</Text>
             </DragDrop>
           ))}
         </ViewShot>

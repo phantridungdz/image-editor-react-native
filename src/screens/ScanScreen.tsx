@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useRef, useState} from 'react';
-import {View, TouchableOpacity, Dimensions} from 'react-native';
+import {View, TouchableOpacity, Dimensions, Text} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 
 interface ScanScreen {
@@ -27,14 +27,20 @@ const ScanScreen: React.FC<ScanScreen> = ({navigation}) => {
       setImages(prevImages => prevImages.concat(imagePaths));
     }
   };
-  useEffect(() => {
-    if (images.length !== 0) {
-      navigation.navigate('SelectImageScreen', {
-        images: images,
-      });
-    }
-  }, [navigation, images]);
+  // useEffect(() => {
+  //   if (images.length !== 0) {
+  //     console.log(images);
+  //     navigation.navigate('SelectImageScreen', {
+  //       images: images,
+  //     });
+  //   }
+  // }, [images, navigation]);
 
+  const onDone = () => {
+    navigation.navigate('SelectImageScreen', {
+      images: images,
+    });
+  };
   return (
     <View className="bg-blue-200 w-full h-full ">
       <View
@@ -53,6 +59,15 @@ const ScanScreen: React.FC<ScanScreen> = ({navigation}) => {
               className="absolute bg-white border-black border-4 h-20 w-20 self-center rounded-full bottom-[45px]"
             />
           </View>
+          {images.length > 1 && (
+            <TouchableOpacity
+              onPress={() => onDone()}
+              className="absolute top-10 left-20">
+              <Text style={{fontSize: 30}} className=" text-white">
+                Compile Now !
+              </Text>
+            </TouchableOpacity>
+          )}
         </RNCamera>
       </View>
     </View>
