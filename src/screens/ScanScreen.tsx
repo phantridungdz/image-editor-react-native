@@ -1,31 +1,39 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useRef, useState} from 'react';
 import {View, TouchableOpacity, Dimensions} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 
 interface ScanScreen {
   navigation: any;
+  route: any;
 }
 
 const ScanScreen: React.FC<ScanScreen> = ({navigation}) => {
   const cameraRef = useRef<any>();
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<
+    {path: string; width: number; height: number}[]
+  >([]);
   const windowHeight = Dimensions.get('window').height;
 
   const takePicture = async () => {
     if (cameraRef.current) {
       const options = {quality: 0.5, base64: true};
       const data = await cameraRef.current.takePictureAsync(options);
-      setImages(images.concat(data.uri));
+      const imagePaths = {
+        path: data.uri,
+        width: data.width / 5,
+        height: data.height / 5,
+      };
+      setImages(prevImages => prevImages.concat(imagePaths));
     }
   };
   useEffect(() => {
     if (images.length !== 0) {
-      console.log(images);
       navigation.navigate('SelectImageScreen', {
         images: images,
       });
     }
-  }, [images, navigation]);
+  }, [navigation, images]);
 
   return (
     <View className="bg-blue-200 w-full h-full ">

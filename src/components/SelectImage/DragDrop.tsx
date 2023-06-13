@@ -96,15 +96,16 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
       <Animated.View
         className="absolute h-full w-full"
         style={[
+          {backgroundColor: 'red'},
           {height: height},
           {width: width},
           {zIndex: zIndex},
           useAnimatedStyle(() => {
             return {
               transform: [
-                {translateX: x.value},
-                {translateY: y.value},
-                {scale: scale.value / 2},
+                {translateX: x.value * 10},
+                {translateY: y.value * 10},
+                {scale: scale.value},
               ],
             };
           }),

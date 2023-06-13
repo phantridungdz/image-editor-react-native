@@ -44,9 +44,11 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
 
   const drag = (_x: number, _y: number) => {};
   const drop = (_x: number, _y: number) => {};
+
   const openImagePicker = () => {
     ImagePicker.openPicker({
       multiple: true,
+      mediaType: 'photo',
     }).then(response => {
       const imagePaths = response.map(image => ({
         path: `file://${image.path}`,
@@ -82,7 +84,6 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
       path: images[index].path,
       mediaType: 'photo',
     }).then(image => {
-      console.log(image);
       const updatedImages = [...images];
       const croppedWidth = image.cropRect?.width || updatedImages[index].width;
       const croppedHeight =
@@ -137,9 +138,9 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
   useEffect(() => {
     if (route.params?.images) {
       setImages(images.concat(route.params.images));
+      route.params = [];
     }
-  }, []);
-
+  }, [route.params?.images]);
   return (
     <View className="bg-blue-900 h-full">
       <View className="h-10 bg-black z-10" />
@@ -178,7 +179,7 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
         </TouchableOpacity>
         <TouchableOpacity
           className="rounded-sm py-[15px] pr-[15px] flex-1"
-          onPress={() => navigation.push('ScanScreen')}>
+          onPress={() => navigation.navigate('ScanScreen')}>
           <Image
             className="w-[25px] h-[25px] p-5 self-end"
             source={require('../../assets/takephoto.png')}
@@ -226,7 +227,7 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
               currentIndex={curentIndex}>
               <TouchableOpacity
                 style={{display: curentIndex === index ? 'flex' : 'none'}}
-                className="h-[55px] w-[55px] absolute  z-10 bg-contain bg-blue-500 justify-center -top-[70px] -right-[55px] drop-shadow-sm"
+                className="h-[55px] w-[55px] absolute z-10 justify-center -top-[70px] -right-[55px] drop-shadow-sm"
                 onPressIn={() => deleteImage(index)}>
                 <Image
                   className="w-[25px] h-[25px] bg-black border-[2px] self-center"
