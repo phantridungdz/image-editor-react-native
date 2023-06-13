@@ -15,6 +15,7 @@ import Slider from '@react-native-community/slider';
 import DragDrop from '../components/SelectImage/DragDrop';
 import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
 import {Text} from 'react-native';
+import Snackbar from 'react-native-snackbar';
 
 interface SelectImageScreen {
   navigation: any;
@@ -68,29 +69,42 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
     setImages(updatedImages);
   };
   const editImage = (index: number) => {
-    ImagePicker.openCropper({
-      compressImageQuality: 1,
-      freeStyleCropEnabled: true,
-      height: images[index].height,
-      width: images[index].width,
-      path: images[index].path,
-      mediaType: 'photo',
-    }).then(image => {
-      console.log(image);
-      const updatedImages = [...images];
-      const croppedWidth = image.cropRect?.width || updatedImages[index].width;
-      const croppedHeight =
-        image.cropRect?.height || updatedImages[index].height;
-      const croppedWidthPart = croppedWidth / 5;
-      const croppedHeightPart = croppedHeight / 5;
-      updatedImages[index] = {
-        ...updatedImages[index],
-        path: `file://${image.path}`,
-        width: croppedWidthPart,
-        height: croppedHeightPart,
-      };
-      setImages(updatedImages);
-    });
+    console.log(
+      '🚀 ~ file: SelectImageScreen.tsx:73 ~ editImage ~ images:',
+      images,
+    );
+    if (images[index] !== undefined) {
+      ImagePicker.openCropper({
+        compressImageQuality: 1,
+        freeStyleCropEnabled: true,
+        height: images[index].height,
+        width: images[index].width,
+        path: images[index].path,
+        mediaType: 'photo',
+      }).then(image => {
+        console.log(image);
+        const updatedImages = [...images];
+        const croppedWidth =
+          image.cropRect?.width || updatedImages[index].width;
+        const croppedHeight =
+          image.cropRect?.height || updatedImages[index].height;
+        const croppedWidthPart = croppedWidth / 5;
+        const croppedHeightPart = croppedHeight / 5;
+        updatedImages[index] = {
+          ...updatedImages[index],
+          path: `file://${image.path}`,
+          width: croppedWidthPart,
+          height: croppedHeightPart,
+        };
+        setImages(updatedImages);
+      });
+    } else {
+      Snackbar.show({
+        text: 'Please pick image',
+        duration: Snackbar.LENGTH_SHORT,
+      });
+      return;
+    }
   };
 
   useEffect(() => {
@@ -175,10 +189,14 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
               </TouchableOpacity>
               <TouchableOpacity onPressIn={() => selectOrNot(index)}>
                 <Image
-                  style={{width: image.width, height: image.height}}
+                  style={{
+                    width: image.width,
+                    height: image.height,
+                  }}
                   source={{uri: image.path}}
                 />
               </TouchableOpacity>
+              <Text>{index}</Text>
             </DragDrop>
           ))}
         </ViewShot>

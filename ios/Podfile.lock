@@ -487,6 +487,8 @@ PODS:
   - RNScreens (3.20.0):
     - React-Core
     - React-RCTImage
+  - RNSnackbar (2.6.2):
+    - React-Core
   - SocketRocket (0.6.0)
   - TOCropViewController (2.6.1)
   - Yoga (1.14.0)
@@ -566,6 +568,7 @@ DEPENDENCIES:
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSnackbar (from `../node_modules/react-native-snackbar`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -682,6 +685,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSnackbar:
+    :path: "../node_modules/react-native-snackbar"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -746,6 +751,7 @@ SPEC CHECKSUMS:
   RNImageCropPicker: 486e2f7e2b0461ce24321f751410dce1b3b49e6d
   RNReanimated: c931b356bda56c0196110bdc462e48e4c2668dc3
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
+  RNSnackbar: 3727b42bf6c4314a53c18185b5203e915a4ab020
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: 065f0b74dba4832d6e328238de46eb72c5de9556
