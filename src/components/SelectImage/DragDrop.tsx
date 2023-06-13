@@ -96,8 +96,8 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
       <Animated.View
         className="absolute h-full w-full"
         style={[
-          {left: zIndex * 20},
-          {top: zIndex * 20},
+          {height: height},
+          {width: width},
           {zIndex: zIndex},
           useAnimatedStyle(() => {
             return {
@@ -112,10 +112,11 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
         <PinchGestureHandler onGestureEvent={zoom}>
           <Animated.View
             style={[
-              {height: height},
-              {width: width},
+              {backgroundColor: 'red'},
+              {height: height + 18},
+              {width: width + 18},
               {borderWidth: isSelect ? 9 : 0},
-              {borderColor: isSelect ? 'blue' : ''},
+              {borderColor: isSelect ? '' : 'blue'},
               useAnimatedStyle(() => {
                 return {
                   transform: [{scale: scale.value}],

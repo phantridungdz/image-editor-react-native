@@ -21,6 +21,11 @@ interface SelectImageScreen {
   route: any;
 }
 
+interface ImageHistoryItem {
+  image: {path: string; width: number; height: number};
+  action: 'resize' | 'undo' | 'redo';
+}
+
 const SelectImageScreen: React.FC<SelectImageScreen> = ({
   navigation,
   route,
@@ -35,6 +40,7 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
   const [_, setScrollHeight] = useState(windowHeight);
   const [widthShotView, setWidthShotView] = useState(windowWidth);
   const [heightShotView, setHeightShotView] = useState(windowHeight);
+  const [imageHistory, setImageHistory] = useState<ImageHistoryItem[]>([]);
 
   const drag = (_x: number, _y: number) => {};
   const drop = (_x: number, _y: number) => {};
@@ -93,11 +99,47 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
     });
   };
 
+  const undoImage = () => {
+    if (imageHistory.length > 0) {
+      const lastAction = imageHistory[imageHistory.length - 1];
+      if (lastAction.action === 'resize') {
+        const updatedImages = [...images];
+        const index = updatedImages.findIndex(
+          image => image.path === lastAction.image.path,
+        );
+        if (index !== -1) {
+          const previousImage =
+            imageHistory[imageHistory.length - 2]?.image ||
+            updatedImages[index];
+          updatedImages[index] = previousImage;
+          setImages(updatedImages);
+          setImageHistory(prevHistory => prevHistory.slice(0, -1));
+        }
+      }
+    }
+  };
+
+  const redoImage = () => {
+    const nextAction = imageHistory[imageHistory.length];
+    if (nextAction && nextAction.action === 'resize') {
+      const updatedImages = [...images];
+      const index = updatedImages.findIndex(
+        image => image.path === nextAction.image.path,
+      );
+      if (index !== -1) {
+        updatedImages[index] = nextAction.image;
+        setImages(updatedImages);
+        setImageHistory(prevHistory => [...prevHistory, nextAction]);
+      }
+    }
+  };
+
   useEffect(() => {
     if (route.params?.images) {
       setImages(images.concat(route.params.images));
     }
   }, []);
+
   return (
     <View className="bg-blue-900 h-full">
       <View className="h-10 bg-black z-10" />
@@ -108,6 +150,22 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
           <Image
             className="w-[25px] h-[25px] p-5"
             source={require('../../assets/gallerry.png')}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="rounded-sm py-[15px] pl-[15px]"
+          onPress={() => undoImage()}>
+          <Image
+            className="w-[25px] h-[25px] p-5"
+            source={require('../../assets/undo.png')}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="rounded-sm py-[15px] pl-[15px]"
+          onPress={() => redoImage()}>
+          <Image
+            className="w-[25px] h-[25px] p-5 rotate-180"
+            source={require('../../assets/undo.png')}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -167,11 +225,13 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
               height={image.height}
               currentIndex={curentIndex}>
               <TouchableOpacity
-                key={index}
                 style={{display: curentIndex === index ? 'flex' : 'none'}}
-                className="h-[55px] w-[55px] absolute  z-10 rounded-full bg-contain bg-white -top-[50px] -right-[25px]"
+                className="h-[55px] w-[55px] absolute  z-10 bg-contain bg-blue-500 justify-center -top-[70px] -right-[55px] drop-shadow-sm"
                 onPressIn={() => deleteImage(index)}>
-                <Text className="text-black m-auto text-[45px]">X</Text>
+                <Image
+                  className="w-[25px] h-[25px] bg-black border-[2px] self-center"
+                  source={require('../../assets/close.png')}
+                />
               </TouchableOpacity>
               <TouchableOpacity onPressIn={() => selectOrNot(index)}>
                 <Image
