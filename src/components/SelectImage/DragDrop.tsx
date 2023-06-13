@@ -94,10 +94,9 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
   return (
     <PanGestureHandler onGestureEvent={drag}>
       <Animated.View
-        className="absolute h-full w-full"
         style={[
-          {left: zIndex * 20},
-          {top: zIndex * 20},
+          // {left: zIndex * 20},
+          // {top: zIndex * 20},
           {zIndex: zIndex},
           useAnimatedStyle(() => {
             return {
@@ -114,7 +113,7 @@ const DragDrop: React.FunctionComponent<DragDrop> = ({
             style={[
               {height: height},
               {width: width},
-              {borderWidth: isSelect ? 9 : 0},
+              {borderWidth: isSelect ? 2 : 0},
               {borderColor: isSelect ? 'blue' : ''},
               useAnimatedStyle(() => {
                 return {
