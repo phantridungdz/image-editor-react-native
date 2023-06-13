@@ -29,9 +29,12 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
   const viewShotRef = React.useRef<ViewShot>(null);
   const windowHeight = Dimensions.get('window').height;
   const windowWidth = Dimensions.get('window').width;
+  const listImage = route.params?.images;
+
   const [images, setImages] = useState<
     {path: string; width: number; height: number}[]
   >([]);
+  console.log('🚀 ~ file: SelectImageScreen.tsx:35 ~ images:', images);
   const [curentIndex, setCurrentIndex] = useState(0);
   const [_, setScrollHeight] = useState(windowHeight);
   const [widthShotView, setWidthShotView] = useState(windowWidth);
@@ -69,10 +72,6 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
     setImages(updatedImages);
   };
   const editImage = (index: number) => {
-    console.log(
-      '🚀 ~ file: SelectImageScreen.tsx:73 ~ editImage ~ images:',
-      images,
-    );
     if (images[index] !== undefined) {
       ImagePicker.openCropper({
         compressImageQuality: 1,
@@ -108,8 +107,8 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
   };
 
   useEffect(() => {
-    if (route.params?.images) {
-      setImages(images.concat(route.params.images));
+    if (listImage) {
+      setImages(images.concat(listImage));
     }
   }, []);
   return (
@@ -183,17 +182,21 @@ const SelectImageScreen: React.FC<SelectImageScreen> = ({
               <TouchableOpacity
                 key={index}
                 style={{display: curentIndex === index ? 'flex' : 'none'}}
-                className="h-[55px] w-[55px] absolute  z-10 rounded-full bg-contain bg-white -top-[50px] -right-[25px]"
+                className="h-[55px] w-[55px] absolute z-10 rounded-full bg-contain bg-white -top-[50px] -right-[25px]"
                 onPressIn={() => deleteImage(index)}>
                 <Text className="text-black m-auto text-[45px]">X</Text>
               </TouchableOpacity>
               <TouchableOpacity onPressIn={() => selectOrNot(index)}>
                 <Image
                   style={{
-                    width: image.width,
-                    height: image.height,
+                    width: image.path
+                      ? image.width
+                      : Dimensions.get('screen').width / 2,
+                    height: image.path
+                      ? image.width
+                      : Dimensions.get('screen').height / 2,
                   }}
-                  source={{uri: image.path}}
+                  source={{uri: image.path ? image.path : image}}
                 />
               </TouchableOpacity>
               <Text>{index}</Text>
